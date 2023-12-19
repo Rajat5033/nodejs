@@ -1,13 +1,11 @@
 import mongoose from "mongoose";
-import envconfig from "./envConfig.js";
 
 mongoose.connect(
-    envconfig.DB_URL
-    
+    `mongodb+srv://rajattechnogetic:rajattechnogetic@cluster0.avm2you.mongodb.net/?retryWrites=true&w=majority`
 )
     .then(() => {
         console.log(`Database is connected`)
     })
-    .catch(() => {
-        console.log("Database is not connected")
+    .catch((error) => {
+        console.log("Database is not connected", error)
     })
