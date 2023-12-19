@@ -1,13 +1,13 @@
 import nodmailer from 'nodemailer';
-import envconfig from '../config/envConfig.js';
+// import envconfig from '../config/envConfig.js';
 
 const transporter = nodmailer.createTransport({
-    host:envconfig.EMAIL_HOST,
-    port:envconfig.EMAIL_PORT,
+    host:'smtp.gmail.com',
+    port:587,
     secure:false,
     auth: {
-        user:envconfig.EMAIL_USER,
-        pass:envconfig.PASS_CODE,
+        user:'rajat.technogetics@gmail.com',
+        pass:'eikfrdtqhxgjtvna',
     },
 })
 export default transporter;

@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { validateEmail } from "../utils/validation.js";
 import { validatePassword } from "../utils/validation.js";
 import { validateContactNo } from "../utils/validation.js";
-import envconfig from "../config/envConfig.js";
+// import envconfig from "../config/envConfig.js";
 import transporter from "../middleware/emailConfig.js";
 
 
@@ -80,7 +80,7 @@ const loginByEmail = async (req, res) => {
             _id: loginEmail._id,
             email: loginEmail.email,
             password: loginEmail.password
-        }, envconfig.SECRET_KEY, {
+        }, 'a1a2s3d4f5g6hj7k8l9', {
             expiresIn: "1h"
         });
          let userInfo = {
@@ -261,10 +261,10 @@ const sendEmail = async (req, res) => {
             if (!user) {
                 return res.status(404).json({ message: "Email not found" });
             } else {
-                const genToken = jwt.sign({ _id: user._id }, envconfig.SECRET_KEY, { expiresIn: '1h' });
+                const genToken = jwt.sign({ _id: user._id }, 'a1a2s3d4f5g6hj7k8l9', { expiresIn: '1h' });
                 const link = `http://localhost:3000/reset-password/?token=${genToken}`;
                 const sendMail = await transporter.sendMail({
-                    from: envconfig.EMAIL_USER,
+                    from: 'rajat.technogetics@gmail.com',
                     to: email,
                     subject: 'Reset Password',
                     html: `Click here to reset your password <a href= ${link}>click here</a> `
@@ -282,7 +282,7 @@ const resetPassword = async (req, res) => {
     const { newPassword, confirmPassword } = req.body;
     try {
         const token = req.query.token;
-        const decode = jwt.verify(token, envconfig.SECRET_KEY);
+        const decode = jwt.verify(token, 'a1a2s3d4f5g6hj7k8l9');
         const user = await userData.findById(decode._id);
         if (!newPassword) {
             return res.status(400).json({ message: "new passoword is required" });

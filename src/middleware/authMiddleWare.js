@@ -1,5 +1,5 @@
 import Jwt from "jsonwebtoken";
-import envconfig from "../config/envConfig.js";
+// import envconfig from "../config/envConfig.js";
 
 const authMiddleWare = (req, res, next) => {
     const token = req.header("Authorization")?.split(' ')[1];
@@ -8,7 +8,7 @@ const authMiddleWare = (req, res, next) => {
 
     }
     try {
-        Jwt.verify(token, envconfig.SECRET_KEY, { expiresIn: "1h" },
+        Jwt.verify(token, 'a1a2s3d4f5g6hj7k8l9', { expiresIn: "1h" },
             (error, user) => {
                 if (error) {
                     return res.status(403).json({ message: "Invalid token" });
