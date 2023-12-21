@@ -1,11 +1,13 @@
 import express from 'express'
 import './src/config/db.js'
 import userRouter from './src/routes/userRouter.js'
+import pageRouter from './src/routes/pageRoutes.js'
 
 const app = express();
 const port = 5000;
 app.use(express.json());
 app.use('/api/v1', userRouter);
+app.use('/api/v1', pageRouter);
 
 app.get('/',function(req, res){
     res.send('Welcome')

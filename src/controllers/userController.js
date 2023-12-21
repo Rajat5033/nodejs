@@ -83,9 +83,9 @@ const loginByEmail = async (req, res) => {
         }, 'a1a2s3d4f5g6hj7k8l9', {
             expiresIn: "1h"
         });
-         let userInfo = {
+        let userInfo = {
             token: token
-         }
+        }
 
         return res.status(201).json({ message: "Login Sucsessfully", userInfo });
     }
@@ -139,7 +139,7 @@ const getUserById = async (req, res) => {
         const token = req.header('Authorization')?.split(' ')[1];
         // console.log(token)
 
-        const decode = jwt.verify(token, envconfig.SECRET_KEY)
+        const decode = jwt.verify(token, 'a1a2s3d4f5g6hj7k8l9')
         // console.log(decode)
 
         const getUserId = await userData.findById(decode._id);
@@ -166,6 +166,7 @@ const getUserById = async (req, res) => {
 const UpdateUserById = async (req, res) => {
     try {
 
+
         // const user = await userData.findById(_id)
         // if(!user){
         //     return res.status(404).json({ message: " user not found" });
@@ -190,6 +191,7 @@ const UpdateUserById = async (req, res) => {
         //     }
         // }
 
+        // using token
 
         const token = req.header('Authorization')?.split(' ')[1];
         console.log(token)
@@ -197,7 +199,7 @@ const UpdateUserById = async (req, res) => {
             return res.status(401).json({ message: "Token is missing" })
         }
         const { fullName, address } = req.body;
-        const decode = jwt.verify(token, envconfig.SECRET_KEY);
+        const decode = jwt.verify(token, 'a1a2s3d4f5g6hj7k8l9');
         console.log(decode)
         if (!decode) {
             return res.status(404).json({ message: "Decode not found" })
@@ -211,6 +213,26 @@ const UpdateUserById = async (req, res) => {
     }
 
 }
+
+// more secure
+
+// const updateUserbyId = async (req, res) => {
+//     try {
+//         const userId = req.user?._id
+//         const { userName, address } = req.body;
+//         const updateuser = await Userdata.findByIdAndUpdate(
+//             userId, { userName, address },
+//             { new: true });
+//         if (!updateuser) {
+//             return res.status(404).json({ message: 'user cant update' });
+//         } else {
+//             return res.status(201).json({ message: 'user updated succesfully by id', updateuser })
+//         }
+//     } catch (error) {
+//         console.error("Error in updating user")
+//         return res.status(500).json({ message: 'user cannot update by id', error })
+//     }
+// }
 
 //delete user by id  
 
@@ -238,9 +260,9 @@ const deleteUserById = async (req, res) => {
         if (!token) {
             return res.status(404).json({ message: "Token not found" })
         }
-        const decode = jwt.verify(token, envconfig.SECRET_KEY)
+        const decode = jwt.verify(token, 'a1a2s3d4f5g6hj7k8l9')
         const deleteUserDelete = await userData.findByIdAndDelete(decode._id)
-        return res.status(200).json({ message: "data deleted",deleteUserDelete})
+        return res.status(200).json({ message: "data deleted", deleteUserDelete })
     }
 
     catch (error) {
@@ -248,6 +270,21 @@ const deleteUserById = async (req, res) => {
     }
 }
 
+
+// get secure data
+const secureData = async (req, res) => {
+    try {
+        const getsecuredata = await userData.find({});
+        if (!getsecuredata) {
+            return res.status(404).json({ message: "Users  not found" })
+        } else {
+            return res.status(201).json({ messgae: "Usres found", getsecuredata });
+        }
+    } catch (error) {
+        console.error("Error in User found")
+        return res.status(500).json({ message: 'Error in user find', error });
+    }
+}
 
 
 //send mail to forget password
@@ -311,9 +348,11 @@ const resetPassword = async (req, res) => {
 const changePassword = async (req, res) => {
     try {
         const { oldPassword, newPassword, confirmPassword } = req.body;
+        const userId = req.user?._id
+        const user = await userData.findById(userId)
 
-        const { _id } = req.params;
-        const user = await userData.findById({ _id: _id })
+        // const { _id } = req.params;
+        // const user = await userData.findById({ _id: _id })
         // console.log("=====>",user)
         if (!user) {
             return res.status(404).json({ message: "User not found" });
@@ -346,4 +385,4 @@ const changePassword = async (req, res) => {
 
 
 
-export { userNewRegister, getAllUser, getUserById, UpdateUserById, deleteUserById, loginByEmail, sendEmail, resetPassword, changePassword }
+export { userNewRegister, getAllUser, getUserById, UpdateUserById, deleteUserById, loginByEmail, secureData, sendEmail, resetPassword, changePassword }

@@ -1,5 +1,5 @@
 import express from 'express'
-import { userNewRegister, getAllUser, getUserById, UpdateUserById, deleteUserById, loginByEmail, sendEmail, resetPassword, changePassword} from '../controllers/userController.js';
+import { userNewRegister, getAllUser, getUserById, UpdateUserById, deleteUserById, loginByEmail, secureData, sendEmail, resetPassword, changePassword} from '../controllers/userController.js';
 import { authMiddleWare } from '../middleware/authMiddleWare.js';
 
 
@@ -22,6 +22,14 @@ router.post('/update',authMiddleWare, UpdateUserById)
 
 //delete user by Id
 router.delete('/delete', deleteUserById)
+
+//secure data
+router.get('/securedata', authMiddleWare, (req, res) => {
+    res.status(500).json({ message: 'secure data is collected', user: req.user })
+})
+
+//secure data way 2
+router.get('./secureData', authMiddleWare, secureData)
 
 //for send-mail
 router.post('/sendEmail', sendEmail);
